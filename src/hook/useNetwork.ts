@@ -1,12 +1,16 @@
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted, Ref } from 'vue'
 
 const ON_LINE = 'online';
 const OFF_LINE = 'offline';
+interface FnHandler {
+    onLineFn?: () => void;
+    offLineFn?: () => void;
+}
 export function useNetwork({
     onLineFn,
     offLineFn,
-}) {
-    const onlineRef = ref(navigator.onLine)
+}: FnHandler): void {
+    const onlineRef: Ref = ref(navigator.onLine)
     watch(
         onlineRef,
         (onLine, oldValue) => {
@@ -19,7 +23,7 @@ export function useNetwork({
             immediate: false,
         }
     )
-    const handler = (e) => {
+    const handler = (e: Event) => {
         const { type } = e
         onlineRef.value = type === ON_LINE
     }

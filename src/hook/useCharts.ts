@@ -1,14 +1,19 @@
-import { ref, unref, onUnmounted, nextTick } from 'vue'
+import { ref, unref, Ref, onUnmounted, nextTick } from 'vue'
 import { useResize } from './useResize'
+
 import { useDebounce } from './useDebounce'
 import echarts from 'echarts'
+import { EChartOption, ECharts } from 'echarts';
 
+declare interface Fn {
+    (): any;
+}
 export function useCharts(
-    elRef,
+    elRef: Ref,
     theme = 'light'
 ) {
-    const chartsInstenceRef = ref(null)
-    let resizeFn = resize
+    const chartsInstenceRef = ref<ECharts | null>(null)
+    let resizeFn: Fn = resize
     const [debounceResize] = useDebounce(resize, 200)
     resizeFn = debounceResize
 
@@ -16,7 +21,7 @@ export function useCharts(
         const el = unref(elRef)
         chartsInstenceRef.value = echarts.init(el,theme)
     }
-    function setOptions(options) {
+    function setOptions(options: EChartOption) {
         let chartInstance = unref(chartsInstenceRef)
         if (!chartInstance) {
             init()

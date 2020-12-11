@@ -10,14 +10,14 @@
         </div>
     </div>
 </template>
-<script>
+<script lang="ts">
 import Sidebar from './Sidebar/index.vue'
 import AppMain from './AppMain.vue'
 import Navbar from './Navbar.vue'
 import TagsView from './TagsView/index.vue'
 import { useStore } from 'vuex'
 import { computed } from 'vue'
-import { useResize } from '@/hook/useResize'
+import { useResize } from '@/hook/useResize.ts'
 import { useDebounce } from '@/hook/useDebounce'
 export default {
     components: {Navbar,AppMain,Sidebar,TagsView},

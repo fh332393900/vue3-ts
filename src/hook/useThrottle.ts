@@ -1,21 +1,26 @@
 import { isFunction } from '@/utils/is/index';
+import {
+  DebounceAndThrottleOptions,
+  DebounceAndThrottleProcedureResult,
+  DebounceAndThrottleProcedure,
+} from './types';
 
 /**
  * 防抖函数
  */
-export function throttle(
-  handle,
-  wait,
-  options= {}
-){
+export function throttle<T extends unknown[]>(
+  handle: DebounceAndThrottleProcedure<T>,
+  wait: number,
+  options: DebounceAndThrottleOptions = {}
+): DebounceAndThrottleProcedureResult<T>{
   if (!isFunction(handle)) {
     throw new Error('handle is not Function!');
   }
-  const { once = false, immediate = false, debounce = false } = options;
+  let { once = false, immediate = false, debounce = false } = options;
   // 定时器对象
-  let timeoutId;
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
   // 是否已经取消
-  let cancelled = false;
+  let cancelled: boolean | null = false;
   /**
    * @description: 清空定时器
    */
@@ -26,7 +31,7 @@ export function throttle(
     }
   }
   /** 取消执行 */
-  function cancel() {
+  function cancel(): void {
     clearTimer();
     cancelled = true;
   }
@@ -34,7 +39,7 @@ export function throttle(
   function cancelExec() {
     once && cancel();
   }
-  function fn(thisknown, ...args) {
+  function fn(this: unknown, ...args: T) {
     // 已经取消,则不执行
     if (cancelled) {
       return;
@@ -61,10 +66,10 @@ export function throttle(
   return [fn, cancel];
 }
 
-export function useThrottle(
-  handle,
-  wait,
-  options = {}
-){
+export function useThrottle<T extends unknown[]>(
+  handle: DebounceAndThrottleProcedure<T>,
+  wait: number,
+  options: DebounceAndThrottleOptions = {}
+): DebounceAndThrottleProcedureResult<T> {
   return throttle(handle, wait, options);
 }
