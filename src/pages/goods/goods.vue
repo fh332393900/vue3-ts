@@ -7,13 +7,13 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useCharts } from '@/hook/useCharts' 
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineComponent, Ref } from 'vue'
 import echarts from 'echarts'
-export default {
+export default defineComponent({
     setup(props,context) {
         const router = useRouter()
         const store = useStore()
@@ -21,7 +21,7 @@ export default {
             router.push('/user')
         }
 
-        const chartRef = ref(null)
+        const chartRef: Ref = ref(null)
         const { setOptions } = useCharts(chartRef)
         onMounted(() => {
             setOptions({
@@ -68,7 +68,7 @@ export default {
             chartRef
         }
     }
-}
+})
 </script>
 
 <style scoped>
