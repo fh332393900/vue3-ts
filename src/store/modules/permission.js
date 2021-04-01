@@ -13,7 +13,7 @@ const mutations = {
 const actions = {
     generateRoutes({commit},roles) {
         return new Promise(resolve => {
-            let accessedRoutes = asyncRoutes || []
+            const accessedRoutes = asyncRoutes || []
             commit('SET_ROUTES',accessedRoutes)
             resolve(accessedRoutes) 
         })

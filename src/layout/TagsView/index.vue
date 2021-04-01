@@ -52,7 +52,7 @@ export default {
         const leftRef = ref(0)
         const topRef = ref(0)
         const selectedTagRef = ref({})
-        let affixTagsRef = ref(0)
+        const affixTagsRef = ref(0)
         /**
          * 初始化标签
          * @author fenghang
@@ -73,7 +73,7 @@ export default {
          * @version v1
          */
         function filterAffixTags(routesRef,basePath ='/') {
-            let tags = []
+            const tags = []
             const routesArr = unref(routesRef)
             routesArr.forEach(routeItem => {
                 if (routeItem.path == '/') { 

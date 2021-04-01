@@ -37,6 +37,7 @@ export default {
         const resizeHandler = () => {
             if (!document.hidden) {
                 const isMobileValue = isMobile()
+                console.log(isMobileValue)
                 if (isMobileValue) {
                     store.dispatch('app/changeSiderBar', false)
                 } else {

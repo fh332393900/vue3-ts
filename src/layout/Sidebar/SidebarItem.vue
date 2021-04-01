@@ -37,7 +37,7 @@ export default {
         }
     },
     setup(props) {
-        let onlyOneChild = ref('')
+        const onlyOneChild = ref('')
         /**
          * 判断路由下是不是只有一个children，只有一个的话菜单直接使用el-menu-item包裹
          * 当一个路由下面的 children 声明的路由大于>1 个时，自动会变成嵌套的模式
