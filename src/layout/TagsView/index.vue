@@ -1,5 +1,5 @@
 <template>
-    <div class="tags-view">
+    <div class="tags-view" ref="tagsViewRef">
         <scroll-pane ref="scrollPane" class="tags-view-wrapper">
             <router-link 
                 class="tags-view-item"
@@ -15,9 +15,9 @@
                 <span v-if="!tag.meta.affix" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"></span>
             </router-link>
         </scroll-pane>
-        <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
+        <ul v-show="visibleRef" :style="{left:leftRef+'px',top:topRef+'px'}" class="contextmenu">
             <li @click="closeOthersTags">关闭其他</li>
-            <li @click="closeAllTags(selectedTag)">关闭所有</li>
+            <li @click="closeAllTags(selectedTagRef)">关闭所有</li>
         </ul>
     </div>
 </template>
@@ -30,17 +30,13 @@ import { useRoute, useRouter } from 'vue-router'
 export default {
     name: 'TagsView',//标签页
     components: {ScrollPane},
-    setup() {
+    setup(props, context) {
         const store = useStore()
         const route = useRoute()
         const router = useRouter()
         const visitedViews = computed(() => store.state.tagsView.visitedViews)
         const routes = computed(() => store.state.permission.routes)
         
-        watch(route,() => {
-            addTags()
-            moveToCurrentTag()
-        })
         const state = reactive({
             visible: false,
             left: 0,
@@ -53,6 +49,18 @@ export default {
         const topRef = ref(0)
         const selectedTagRef = ref({})
         const affixTagsRef = ref(0)
+        const tagsViewRef = ref(null)
+        watch(route,() => {
+            addTags()
+            moveToCurrentTag()
+        })
+        watch(visibleRef, (newValue, oldValue) => {
+            if (newValue) {
+                document.body.addEventListener('click', closeMenu)
+            } else {
+                document.body.removeEventListener('click', closeMenu)
+            }
+        })
         /**
          * 初始化标签
          * @author fenghang
@@ -104,15 +112,17 @@ export default {
          * @version v1
          */
         const tagsRef = ref(null)
+        const scrollPaneRef = ref(null)
         function moveToCurrentTag() {
-            // nextTick(() => {
-            //     for (const tag of tagsRef) {
-            //         if (tag.to.path === route.path) {
-            //             this.$refs.scrollPane.moveToTarget(tag)
-            //             break
-            //         }
-            //     }
-            // })
+            console.log(visitedViews.value)
+            nextTick(() => {
+                for (const tag of visitedViews.value) {
+                    if (tag.path === route.path) {
+                        scrollPaneRef.moveToTarget(tag)
+                        break
+                    }
+                }
+            })
         }
         /**
          * 关闭标签
@@ -138,11 +148,31 @@ export default {
                 router.push(lastView.fullPath)
             }
         }
+        //关闭其他的标签
+        function closeOthersTags() {
+            //选择的标签是当前路由，就不用跳转
+            if(route.path != selectedTagRef.value.path) {
+                router.push(selectedTagRef.value)
+            }
+            store.dispatch('delOthersViews', selectedTagRef.value).then(() => {
+                moveToCurrentTag()
+            })
+        }
+        //关闭所有的标签
+        function closeAllTags(view) {
+            store.dispatch('delAllViews').then(({ visitedViews }) => {
+                if (affixTagsRef.value.some(tag => tag.path === view.path)) {
+                    return
+                }
+                toLastView(visitedViews, view)
+            })
+        }
         //鼠标右键点击标签，展示关闭菜单
         const openMenu = (tag,e) => {
+            console.log(context)
             const menuMinWidth = 105
-            const offsetLeft = this.$el.getBoundingClientRect().left // 容器左内边距 
-            const offsetWidth = this.$el.offsetWidth // 容器宽度
+            const offsetLeft = tagsViewRef.value.getBoundingClientRect().left // 容器左内边距 
+            const offsetWidth = tagsViewRef.value.offsetWidth // 容器宽度
             const maxLeft = offsetWidth - menuMinWidth 
             const left = e.clientX - offsetLeft + 15 
 
@@ -175,48 +205,16 @@ export default {
             filterAffixTags,
             addTags,
             tagsRef,
+            scrollPaneRef,
             moveToCurrentTag,
             closeSelectedTag,
             toLastView,
             openMenu,
-            closeMenu
+            closeMenu,
+            tagsViewRef,
+            closeOthersTags,
+            closeAllTags
         }
-    },
-    watch: {
-        //监听关闭菜单是否打开
-        visible(value) {
-            if (value) {
-                document.body.addEventListener('click', this.closeMenu)
-            } else {
-                document.body.removeEventListener('click', this.closeMenu)
-            }
-        }
-    },
-    methods: {
-        
-        //关闭其他的标签
-        closeOthersTags() {
-            //选择的标签是当前路由，就不用跳转
-            if(this.$route.path != this.selectedTag.path) {
-                this.$router.push(this.selectedTag)
-            }
-            this.$store.dispatch('delOthersViews', this.selectedTag).then(() => {
-                this.moveToCurrentTag()
-            })
-            //this.$store.dispatch('removeOtherKey',this.selectedTag.fullPath)
-        },
-        //关闭所有的标签
-        closeAllTags(view) {
-            this.$store.dispatch('delAllViews').then(({ visitedViews }) => {
-                if (this.affixTags.some(tag => tag.path === view.path)) {
-                    return
-                }
-                this.toLastView(visitedViews, view)
-            })
-            this.$store.dispatch('clearQuery')
-        },
-        
-        
     }
 }
 </script>
