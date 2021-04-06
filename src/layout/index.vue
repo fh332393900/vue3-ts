@@ -17,7 +17,7 @@ import Navbar from './Navbar.vue'
 import TagsView from './TagsView/index.vue'
 import { useStore } from 'vuex'
 import { computed } from 'vue'
-import { useResize } from '@/hook/useResize.ts'
+import { useResize } from '@/hook/useResize'
 import { useDebounce } from '@/hook/useDebounce'
 export default {
     components: {Navbar,AppMain,Sidebar,TagsView},
@@ -37,7 +37,6 @@ export default {
         const resizeHandler = () => {
             if (!document.hidden) {
                 const isMobileValue = isMobile()
-                console.log(isMobileValue)
                 if (isMobileValue) {
                     store.dispatch('app/changeSiderBar', false)
                 } else {

@@ -3,7 +3,7 @@
         <div>
             <el-button type="primary" @click="toUser">到用户</el-button>
         </div>
-        <div ref="chartRef" style="width:100%;height:500px"></div>
+        <div ref="chartRef" style="width:100%;height:500px;display: none;"></div>
     </div>
 </template>
 

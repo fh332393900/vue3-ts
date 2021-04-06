@@ -1,29 +1,27 @@
-<template>
-    <div v-if="!item.hidden">
-        <template v-if="hasOneShowingChild(item.children,item)">
-            <router-link :to="resolvePath(onlyOneChild.path)">
-                <el-menu-item :index="resolvePath(onlyOneChild.path)">
-                    <i :class="onlyOneChild.meta.icon"></i>
-                    <template #title>{{onlyOneChild.meta.title}}</template>
-                </el-menu-item>
-            </router-link>
+<template v-if="!item.hidden">
+    <template v-if="hasOneShowingChild(item.children,item)">
+        <router-link :to="resolvePath(onlyOneChild.path)">
+            <el-menu-item :index="resolvePath(onlyOneChild.path)">
+                <i :class="onlyOneChild.meta.icon"></i>
+                <template #title>{{onlyOneChild.meta.title}}</template>
+            </el-menu-item>
+        </router-link>
+    </template>
+    <el-submenu v-else :index="resolvePath(item.path)" popper-append-to-body>
+        <template #title>
+            <i :class="item.meta.icon"></i>
+            <span>{{item.meta.title}}</span>
         </template>
-        <el-submenu v-else :index="resolvePath(item.path)" popper-append-to-body>
-            <template #title>
-                <i :class="item.meta.icon"></i>
-                <span>{{item.meta.title}}</span>
-            </template>
-            <router-link v-for="child in item.children" :key="child.path" :to="resolvePath(child.path)">
-                <el-menu-item :index="resolvePath(child.path)">
-                    <span>{{child.meta.title}}</span>
-                </el-menu-item>
-            </router-link>
-        </el-submenu>
-    </div>
+        <router-link v-for="child in item.children" :key="child.path" :to="resolvePath(child.path)">
+            <el-menu-item :index="resolvePath(child.path)">
+                <span>{{child.meta.title}}</span>
+            </el-menu-item>
+        </router-link>
+    </el-submenu>
 </template>
 <script>
 import path from 'path'
-import { ref, unref } from 'vue'
+import { ref } from 'vue'
 export default {
     name: 'SidebarItem',
     props: {

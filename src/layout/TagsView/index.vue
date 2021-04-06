@@ -8,6 +8,7 @@
                 :class="isActive(tag) ? 'active' : ''"
                 :key="tag.path" 
                 :to="{path: tag.path,query: tag.query}"
+                @contextmenu.prevent.native="openMenu(tag,$event)"
             >
                 <i :class="tag.meta.icon" v-if="isActive(tag)"></i>
                 {{tag.title}}
@@ -36,7 +37,6 @@ export default {
         const visitedViews = computed(() => store.state.tagsView.visitedViews)
         const routes = computed(() => store.state.permission.routes)
         
-
         watch(route,() => {
             addTags()
             moveToCurrentTag()
@@ -65,6 +65,10 @@ export default {
                     store.dispatch('addVisitedView',tag)
                 }
             }
+        }
+        //当前激活的标签
+        const isActive = (routeItem) => {
+            return routeItem.path === route.path
         }
         /**
          * 筛选路由中带有affix的标签，一进入项目默认开启的标签，这部分标签不能关闭
@@ -134,12 +138,35 @@ export default {
                 router.push(lastView.fullPath)
             }
         }
+        //鼠标右键点击标签，展示关闭菜单
+        const openMenu = (tag,e) => {
+            const menuMinWidth = 105
+            const offsetLeft = this.$el.getBoundingClientRect().left // 容器左内边距 
+            const offsetWidth = this.$el.offsetWidth // 容器宽度
+            const maxLeft = offsetWidth - menuMinWidth 
+            const left = e.clientX - offsetLeft + 15 
+
+            if (left > maxLeft) {
+                leftRef.value = maxLeft
+            } else {
+                leftRef.value = left
+            }
+
+            topRef.value = e.clientY
+            visibleRef.value = true
+            selectedTagRef.value = tag
+        }
+        //点击任意区域，隐藏关闭菜单
+        function closeMenu() {
+            visibleRef.value = false
+        }
         initTags()
         addTags()
         return {
             visitedViews,
             routes,
             visibleRef,
+            isActive,
             leftRef,
             topRef,
             selectedTagRef,
@@ -150,7 +177,9 @@ export default {
             tagsRef,
             moveToCurrentTag,
             closeSelectedTag,
-            toLastView
+            toLastView,
+            openMenu,
+            closeMenu
         }
     },
     watch: {
@@ -164,11 +193,6 @@ export default {
         }
     },
     methods: {
-        isActive(route) {
-            return route.path === this.$route.path
-        },
-        
-        
         
         //关闭其他的标签
         closeOthersTags() {
@@ -191,28 +215,8 @@ export default {
             })
             this.$store.dispatch('clearQuery')
         },
-        //鼠标右键点击标签，展示关闭菜单
-        openMenu(tag,e) {
-            const menuMinWidth = 105
-            const offsetLeft = this.$el.getBoundingClientRect().left // 容器左内边距 
-            const offsetWidth = this.$el.offsetWidth // 容器宽度
-            const maxLeft = offsetWidth - menuMinWidth 
-            const left = e.clientX - offsetLeft + 15 
-
-            if (left > maxLeft) {
-                this.left = maxLeft
-            } else {
-                this.left = left
-            }
-
-            this.top = e.clientY
-            this.visible = true
-            this.selectedTag = tag
-        },
-        //点击任意区域，隐藏关闭菜单
-        closeMenu() {
-            this.visible = false
-        }
+        
+        
     }
 }
 </script>

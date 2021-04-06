@@ -1,12 +1,15 @@
 <template>
     <div class="app-main">
-        <router-view />
+        <router-view v-slot="{ Component }">
+            <transition name="fade-transform" mode="out-in">
+                <component :is="Component" />
+            </transition>
+        </router-view>
     </div>
 </template>
 <script>
 export default {
     name: 'AppMain',//主要内容区域
-    
 }
 </script>
 <style lang="scss" scoped>
@@ -19,7 +22,7 @@ export default {
     //内容区域的过度动画
     .fade-transform-leave-active,
     .fade-transform-enter-active {
-        transition: all .3s;
+        transition: all .4s;
     }
     .fade-transform-enter {
         opacity: 0;

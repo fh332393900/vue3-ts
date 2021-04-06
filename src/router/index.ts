@@ -23,7 +23,7 @@ export const constantRoutes = [{
         meta: { title: '用户列表', icon: 'el-icon-user'},
     },{
         path: 'add',
-        component: () => import('../pages/user/user.vue'),
+        component: () => import('../pages/user/user2.vue'),
         name: 'add',
         meta: { title: '用户添加', icon: 'el-icon-user'},
     }]

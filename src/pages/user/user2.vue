@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="title">user</div>
+        <div class="title">user2</div>
         <!-- <el-button type="success" @click="back">返回</el-button> -->
     </div>
 </template>
@@ -25,8 +25,8 @@ export default {
 
 <style lang="scss" scoped>
     .title {
-        padding: 20px;
-        font-size: 14px;
-        color: #9b9b9b
+      padding: 20px;
+      font-size: 14px;
+      color: #9b9b9b
     }
 </style>
