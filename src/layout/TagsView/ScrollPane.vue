@@ -17,6 +17,9 @@ export default {
   computed: {
     scrollWrapper() {
       return this.$refs.scrollContainer.$refs.wrap
+    },
+    visitedViews() {
+      return this.$store.state.tagsView.visitedViews
     }
   },
   methods: {
@@ -29,8 +32,7 @@ export default {
       const $container = this.$refs.scrollContainer.$el
       const $containerWidth = $container.offsetWidth
       const $scrollWrapper = this.scrollWrapper
-      const tagList = this.$parent.$refs.tag
-
+      const tagList = this.visitedViews
       let firstTag = null
       let lastTag = null
 
@@ -46,7 +48,10 @@ export default {
         $scrollWrapper.scrollLeft = $scrollWrapper.scrollWidth - $containerWidth
       } else {
         // find preTag and nextTag
-        const currentIndex = tagList.findIndex(item => item === currentTag)
+        console.log(currentTag);
+        console.log(tagList);
+        const currentIndex = tagList.findIndex(item => item.path === currentTag.path)
+        
         const prevTag = tagList[currentIndex - 1]
         const nextTag = tagList[currentIndex + 1]
 

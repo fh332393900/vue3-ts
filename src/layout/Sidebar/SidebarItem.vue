@@ -73,23 +73,23 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    .el-submenu .el-menu-item {
-        background-color: #1f2d3d !important;
+    // .el-submenu .el-menu-item {
+    //     background-color: #1f2d3d !important;
 
-        &:hover {
-            background-color: #001528 !important;
-        }
-    }
-    .el-menu-item:hover{
-        outline: 0 !important;
-        color: #1979f1 !important;
-    }
-    .el-menu-item:hover > i {
-        color: #1979f1 !important;
-    }
-    .el-menu-item.is-active {
-        color: #1979f1 !important;
-    }
+    //     &:hover {
+    //         background-color: #001528 !important;
+    //     }
+    // }
+    // .el-menu-item:hover{
+    //     outline: 0 !important;
+    //     color: #1979f1 !important;
+    // }
+    // .el-menu-item:hover > i {
+    //     color: #1979f1 !important;
+    // }
+    // .el-menu-item.is-active {
+    //     color: #1979f1 !important;
+    // }
     /deep/ {
         a {
             text-decoration: none;

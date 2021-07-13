@@ -1,9 +1,9 @@
 <template>
     <div class="tags-view" ref="tagsViewRef">
-        <scroll-pane ref="scrollPane" class="tags-view-wrapper">
+        <scroll-pane ref="scrollPaneRef" class="tags-view-wrapper">
             <router-link 
                 class="tags-view-item"
-                ref="tagsRef"
+                ref="tag"
                 v-for="tag in visitedViews"
                 :class="isActive(tag) ? 'active' : ''"
                 :key="tag.path" 
@@ -114,11 +114,10 @@ export default {
         const tagsRef = ref(null)
         const scrollPaneRef = ref(null)
         function moveToCurrentTag() {
-            console.log(visitedViews.value)
             nextTick(() => {
                 for (const tag of visitedViews.value) {
                     if (tag.path === route.path) {
-                        scrollPaneRef.moveToTarget(tag)
+                        scrollPaneRef.value.moveToTarget(tag)
                         break
                     }
                 }
