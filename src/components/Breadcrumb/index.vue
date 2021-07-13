@@ -10,36 +10,46 @@
 </template>
 
 <script>
-export default {
+import { defineComponent, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+export default defineComponent({
   name: "Breadcrumb",
-  data() {
-    return {
-      //面包屑层级
-      levelList: [],
-    };
-  },
-  watch: {
-    //监听路由的变化，来调用面包屑的路由信息函数
-    $route() {
-      this.getBreadcrumb();
-    },
-  },
-  created() {
-    this.getBreadcrumb();
-  },
-  methods: {
-    /**
+	setup() {
+		// 路由层级
+		const levelList = ref([]);
+		const $route = useRoute();
+		const $router = useRouter();
+		watch(
+			() => $route.path,
+			() => {
+				getBreadcrumb();
+			}
+		);
+		/**
+     * 判断第一个路由信息是不是首页
+     * @author fenghang
+     * @param {Object} route
+     * @version v1
+     */
+		const isDashboard = (route) => {
+      const name = route && route.name;
+      if (!name) {
+        return false;
+      }
+      return name.trim() === "工作台";
+    }
+		/**
      * 获取面包屑的路由信息
      * @author fenghang
      * @version v1
      */
-    getBreadcrumb() {
-      let matched = this.$route.matched.filter(
+		const getBreadcrumb = () => {
+			let matched = $route.matched.filter(
         (item) => item.meta && item.meta.title
       );
       const first = matched[0];
       //如果第一个路由信息不是首页，就添加一个
-      if (!this.isDashboard(first)) {
+      if (!isDashboard(first)) {
         matched = [
           {
             path: "/dashboard",
@@ -49,40 +59,34 @@ export default {
           },
         ].concat(matched);
       }
-      this.levelList = matched.filter((item) => item.meta && item.meta.title);
-    },
-    /**
-     * 判断第一个路由信息是不是首页
-     * @author fenghang
-     * @param {Object} route
-     * @version v1
-     */
-    isDashboard(route) {
-      const name = route && route.name;
-      if (!name) {
-        return false;
-      }
-      return name.trim() === "工作台";
-    },
-    /**
+      levelList.value = matched.filter((item) => item.meta && item.meta.title);
+		}
+		/**
      *  点击面包屑跳转
      * @author fenghang
      * @param {Object} item 要跳转的路由
      * @version v1
      */
-    handleLink(item) {
+		const handleLink = (item) => {
       const { redirect, path } = item;
       //如果是当前页面就不作跳转
-      if (redirect !== this.$route.path) {
+      if (redirect !== $route.path) {
         if (redirect) {
-          this.$router.push(redirect);
+          $router.push(redirect);
           return;
         }
-        this.$router.push(path);
+        $router.push(path);
       }
-    },
-  },
-};
+    }
+		getBreadcrumb();
+		return {
+			levelList,
+			isDashboard,
+			getBreadcrumb,
+			handleLink
+		};
+	}
+});
 </script>
 
 <style lang="scss" scoped>

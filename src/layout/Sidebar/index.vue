@@ -33,15 +33,14 @@ export default {
   name: "Sidebar",
   components: { Logo, SidebarItem },
   setup() {
-    const store = useStore();
-    const route = useRoute();
+    const $store = useStore();
+    const $route = useRoute();
 
-    const permissionRoutes = computed(() => store.getters.permissionRoutes);
-    const sidebar = computed(() => store.getters.sidebar.open);
-    console.log(isRef(sidebar));
+    const permissionRoutes = computed(() => $store.getters.permissionRoutes);
+    const sidebar = computed(() => $store.getters.sidebar.open);
     const isCollapse = computed(() => !sidebar.value);
     const activeMenu = computed(() => {
-      const { meta, path } = route;
+      const { meta, path } = $route;
       if (meta.activeMenu) {
         return meta.activeMenu;
       }

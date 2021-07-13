@@ -29,17 +29,11 @@
 import ScrollPane from "./ScrollPane.vue";
 import path from "path";
 import { useStore } from "vuex";
-import { computed, isRef, reactive, ref, unref, watch, nextTick } from "vue";
+import { computed, isRef, reactive, ref, unref, watch, nextTick, watchEffect } from "vue";
 import { useRoute, useRouter, onBeforeRouteUpdate } from "vue-router";
 export default {
   name: "TagsView", //标签页
   components: { ScrollPane },
-  watch: {
-    $route() {
-      this.addTags();
-      this.moveToCurrentTag();
-    },
-  },
   setup(props, context) {
     const store = useStore();
     const route = useRoute();
@@ -60,10 +54,13 @@ export default {
     const selectedTagRef = ref({});
     const affixTagsRef = ref(0);
     const tagsViewRef = ref(null);
-    // watch(route, () => {
-    //     addTags()
-    //     moveToCurrentTag()
-    // })
+    watch(
+			() => route.path,
+			() => {
+				addTags();
+				moveToCurrentTag();
+    	}
+		);
     watch(visibleRef, (newValue, oldValue) => {
       if (newValue) {
         document.body.addEventListener("click", closeMenu);
@@ -257,16 +254,6 @@ export default {
   background-color: #409eff;
   color: #fff;
   border-color: #409eff;
-  // &::before {
-  //     content: "";
-  //     background: #fff;
-  //     display: inline-block;
-  //     width: 8px;
-  //     height: 8px;
-  //     border-radius: 50%;
-  //     position: relative;
-  //     margin-right: 2px;
-  // }
 }
 .el-icon-close {
   width: 16px;
