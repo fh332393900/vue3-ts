@@ -1,36 +1,36 @@
 <template>
-	<div class="sidebar-logo-container" >
-		<transition name="sidebarLogoFade">
-			<router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-				<!-- <h1 class="sidebar-title">{{ title }} </h1> -->
-			</router-link>
-			<router-link v-else key="expand" class="sidebar-logo-link" to="/">
-				<img v-if="logo" :src="logo" class="sidebar-logo">
-				<h1 class="sidebar-title">{{ title }} </h1>
-			</router-link>
-		</transition>
-	</div>
+  <div class="sidebar-logo-container">
+    <transition name="sidebarLogoFade">
+      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
+        <!-- <h1 class="sidebar-title">{{ title }} </h1> -->
+      </router-link>
+      <router-link v-else key="expand" class="sidebar-logo-link" to="/">
+        <img v-if="logo" :src="logo" class="sidebar-logo" />
+        <h1 class="sidebar-title">{{ title }}</h1>
+      </router-link>
+    </transition>
+  </div>
 </template>
 <script>
-import { ref } from 'vue'
+import { ref } from "vue";
 export default {
-	name: 'SidebarLogo',//菜单栏logo图标
-	props: {
-		//菜单是否伸缩
-		collapse: {
-			type: Boolean,
-			required: true
-		}
-	},
-	setup(props) {
-		const title = ref('111')
-		const logo = ref('')
-		return {
-			title,
-			logo
-		}
-	}
-}
+  name: "SidebarLogo", //菜单栏logo图标
+  props: {
+    //菜单是否伸缩
+    collapse: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  setup(props) {
+    const title = ref("111");
+    const logo = ref("");
+    return {
+      title,
+      logo,
+    };
+  },
+};
 </script>
 <style lang="scss" scoped>
 .sidebarLogoFade-enter-active {
