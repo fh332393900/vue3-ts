@@ -5,10 +5,9 @@ const state = {
 }
 const mutations = {
     TOGGLE_SIDEBAR: state => {
-        
         state.sidebar.open = !state.sidebar.open
     },
-    CHANGE_SIDERBAR: (state,value) => {
+    CHANGE_SIDERBAR: (state, value) => {
         state.sidebar.open = value
     },
 }
@@ -16,8 +15,8 @@ const actions = {
     toggleSideBar({ commit }) {
         commit('TOGGLE_SIDEBAR')
     },
-    changeSiderBar({commit},value) {
-        commit('CHANGE_SIDERBAR',value)
+    changeSiderBar({commit}, value) {
+        commit('CHANGE_SIDERBAR', value)
     },
 }
 export default {

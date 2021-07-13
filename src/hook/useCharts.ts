@@ -12,41 +12,41 @@ export function useCharts(
     elRef: Ref,
     theme = 'light'
 ) {
-    const chartsInstenceRef = ref<ECharts | null>(null)
-    let resizeFn: Fn = resize
-    const [debounceResize] = useDebounce(resize, 200)
-    resizeFn = debounceResize
+    const chartsInstenceRef = ref<ECharts | null>(null);
+    let resizeFn: Fn = resize;
+    const [debounceResize] = useDebounce(resize, 200);
+    resizeFn = debounceResize;
 
     function init() {
-        const el = unref(elRef)
-        chartsInstenceRef.value = echarts.init(el,theme)
+        const el = unref(elRef);
+        chartsInstenceRef.value = echarts.init(el, theme);
     }
     function setOptions(options: EChartOption) {
-        let chartInstance = unref(chartsInstenceRef)
+        let chartInstance = unref(chartsInstenceRef);
         if (!chartInstance) {
-            init()
-            chartInstance = unref(chartsInstenceRef)
+            init();
+            chartInstance = unref(chartsInstenceRef);
         }
         nextTick(() => {
-            chartInstance.setOption(options)
-        })
+            chartInstance.setOption(options);
+        });
     }
     function resize() {
-        const chartInstance = unref(chartsInstenceRef)
+        const chartInstance = unref(chartsInstenceRef);
         if (!chartInstance) {
-            return
+            return;
         }
-        chartInstance.resize()
+        chartInstance.resize();
     }
-    useResize(resizeFn)
+    useResize(resizeFn);
     onUnmounted(() => {
-        const chartInstance = unref(chartsInstenceRef)
+        const chartInstance = unref(chartsInstenceRef);
         if (!chartInstance) {
-            return
+            return;
         }
-        chartInstance.dispose()
-        chartsInstenceRef.value = null
-    })
+        chartInstance.dispose();
+        chartsInstenceRef.value = null;
+    });
     return {
         setOptions,
         echarts,

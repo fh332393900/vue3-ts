@@ -12,7 +12,8 @@
 	</div>
 </template>
 <script>
-export default {
+import { defineComponent } from 'vue';
+export default defineComponent({
 	name: 'Hamburger',//控制菜单伸缩的按钮组件
 	props: {
 		isActive: {//菜单是否伸缩
@@ -20,17 +21,20 @@ export default {
 			default: false
 		}
 	},
-	methods: {
+	setup(props, context) {
 		/**
 		 * 点击按钮交替伸缩菜单
 		 * @author fenghang
-		 * @version v1
+		 * @version v3
 		 */
-		toggleClick() {
-			this.$emit('toggleClick')
+		const toggleClick = () => {
+			context.emit('toggleClick');
+		}
+		return {
+			toggleClick
 		}
 	}
-}
+});
 </script>
 <style scoped>
 	.hamburger {

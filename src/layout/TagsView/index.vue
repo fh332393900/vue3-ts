@@ -26,10 +26,16 @@ import ScrollPane from './ScrollPane.vue'
 import path from 'path'
 import { useStore } from 'vuex'
 import { computed, isRef, reactive, ref, unref, watch, nextTick } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter, onBeforeRouteUpdate  } from 'vue-router'
 export default {
     name: 'TagsView',//标签页
     components: {ScrollPane},
+    watch: {
+        $route() {
+            this.addTags()
+            this.moveToCurrentTag()
+        }
+    },
     setup(props, context) {
         const store = useStore()
         const route = useRoute()
@@ -50,10 +56,10 @@ export default {
         const selectedTagRef = ref({})
         const affixTagsRef = ref(0)
         const tagsViewRef = ref(null)
-        watch(route,() => {
-            addTags()
-            moveToCurrentTag()
-        })
+        // watch(route, () => {
+        //     addTags()
+        //     moveToCurrentTag()
+        // })
         watch(visibleRef, (newValue, oldValue) => {
             if (newValue) {
                 document.body.addEventListener('click', closeMenu)
@@ -144,14 +150,14 @@ export default {
             const lastView = visitedViews.slice(-1)[0]
             //如果关闭的是其他标签就不做跳转
             if (lastView && lastView.fullPath != route.fullPath) {
-                router.push(lastView.fullPath)
+                router.push(lastView.fullPath).catch(e => {})
             }
         }
         //关闭其他的标签
         function closeOthersTags() {
             //选择的标签是当前路由，就不用跳转
             if(route.path != selectedTagRef.value.path) {
-                router.push(selectedTagRef.value)
+                router.push(selectedTagRef.value).catch(e => {})
             }
             store.dispatch('delOthersViews', selectedTagRef.value).then(() => {
                 moveToCurrentTag()

@@ -1,15 +1,15 @@
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue';
 
 export function useResize (
     handlerFn: () => any
 ) {
     const handler = () => {
-        handlerFn()
+        handlerFn();
     }
     onMounted(() => {
-        window.addEventListener('resize', handler)
-    })
+        window.addEventListener('resize', handler);
+    });
     onUnmounted(() => {
-        window.removeEventListener('resize', handler)
-    })
+        window.removeEventListener('resize', handler);
+    });
 }
