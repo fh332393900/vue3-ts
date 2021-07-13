@@ -5,7 +5,11 @@
       <breadcrumb></breadcrumb>
     </div>
     <div class="navbar-menu">
-      <div class="right-menu-item"></div>
+      <div class="right-menu-item">
+				<el-tooltip content="全屏" effect="dark" placement="bottom">
+					<screenfull></screenfull>
+				</el-tooltip>
+			</div>
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <el-avatar
@@ -27,10 +31,11 @@
 <script>
 import Hamburger from "../components/Hamburger/index.vue";
 import Breadcrumb from "../components/Breadcrumb/index.vue";
+import Screenfull from '@/components/Screenfull/index.vue'
 import { mapGetters } from "vuex";
 export default {
   name: "Navbar", //头部区域
-  components: { Hamburger, Breadcrumb },
+  components: { Hamburger, Breadcrumb, Screenfull },
   computed: {
     ...mapGetters(["sidebar"]),
   },
